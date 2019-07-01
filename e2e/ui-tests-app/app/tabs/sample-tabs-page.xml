@@ -1,0 +1,42 @@
+<Page>
+
+  <Tabs id="tabs">
+
+    <TabStrip>
+
+      <TabStripItem title="TabStripItem 1" iconSource="res://icon">
+      </TabStripItem>
+
+      <TabStripItem>
+        <Label text="TabStripItem 2">
+        </Label>
+        <Image src="res://icon">
+        </Image>
+      </TabStripItem>
+
+      <TabStripItem title="TabStripItem 3" iconSource="res://icon">
+      </TabStripItem>
+
+    </TabStrip>
+
+    <TabContentItem>
+      <StackLayout>
+        <Label text="TabContentItem 1" />
+      </StackLayout>
+    </TabContentItem>
+
+    <TabContentItem>
+      <StackLayout>
+        <Label text="TabContentItem 2" />
+      </StackLayout>
+    </TabContentItem>
+
+    <TabContentItem>
+      <StackLayout>
+        <Label text="TabContentItem 3" />
+      </StackLayout>
+    </TabContentItem>
+
+  </Tabs>
+
+</Page>
