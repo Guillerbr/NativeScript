@@ -229,29 +229,41 @@ function initializeNativeClasses() {
             }
         }
     }
-    
+
     PagerAdapter = FragmentPagerAdapter;
 }
 
 function createTabItemSpec(item: TabStripItem): org.nativescript.widgets.TabItemSpec {
     const result = new org.nativescript.widgets.TabItemSpec();
-    result.title = item.title;
+    let iconSource;
 
-    if (item.iconSource) {
-        if (item.iconSource.indexOf(RESOURCE_PREFIX) === 0) {
-            result.iconId = ad.resources.getDrawableId(item.iconSource.substr(RESOURCE_PREFIX.length));
+    if (item.label) {
+        result.title = item.label.text;
+    } else if (item.title) {
+        result.title = item.title;
+    }
+
+    if (item.image) {
+        iconSource = item.image.src;
+    } else if (item.iconSource) {
+        iconSource = item.iconSource;
+    }
+
+    if (iconSource) {
+        if (iconSource.indexOf(RESOURCE_PREFIX) === 0) {
+            result.iconId = ad.resources.getDrawableId(iconSource.substr(RESOURCE_PREFIX.length));
             if (result.iconId === 0) {
                 // TODO
-                // traceMissingIcon(item.iconSource);
+                // traceMissingIcon(iconSource);
             }
         } else {
-            const is = fromFileOrResource(item.iconSource);
+            const is = fromFileOrResource(iconSource);
             if (is) {
                 // TODO: Make this native call that accepts string so that we don't load Bitmap in JS.
                 result.iconDrawable = new android.graphics.drawable.BitmapDrawable(application.android.context.getResources(), is.android);
             } else {
                 // TODO
-                // traceMissingIcon(item.iconSource);
+                // traceMissingIcon(iconSource);
             }
         }
     }
@@ -451,7 +463,7 @@ export class Tabs extends TabsBase {
 
     public _onRootViewReset(): void {
         super._onRootViewReset();
-        
+
         // call this AFTER the super call to ensure descendants apply their rootview-reset logic first
         // i.e. in a scenario with tab frames let the frames cleanup their fragments first, and then
         // cleanup the tab fragments to avoid
