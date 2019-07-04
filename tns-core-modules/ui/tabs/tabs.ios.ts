@@ -72,23 +72,8 @@ class UIPageViewControllerImpl extends UIPageViewController {
             tabBar.items = NSArray.arrayWithArray(tabBarItems);
         }
 
-        // tabBar.items = <NSArray<UITabBarItem>>NSArray.alloc().initWithArray([
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        // ]);
-
         tabBar.delegate = MDCTabBarDelegateImpl.initWithOwner(new WeakRef(owner));
-        tabBar.itemAppearance = MDCTabBarItemAppearance.Titles;
+        tabBar.itemAppearance = MDCTabBarItemAppearance.TitledImages;
         tabBar.tintColor = UIColor.blueColor;
         tabBar.barTintColor = UIColor.whiteColor;
         tabBar.setTitleColorForState(UIColor.blackColor, MDCTabBarItemState.Normal);
@@ -352,7 +337,7 @@ class UIPageViewControllerDelegateImpl extends NSObject implements UIPageViewCon
         //
     }
 
-    public pageViewControllerDidFinishAnimatingPreviousViewControllersTransitionCompleted(pageViewController: UIPageViewController, didFinishAnimating: boolean,  previousViewControllers: NSArray<UIViewController>, transitionCompleted: boolean): void {
+    public pageViewControllerDidFinishAnimatingPreviousViewControllersTransitionCompleted(pageViewController: UIPageViewController, didFinishAnimating: boolean, previousViewControllers: NSArray<UIViewController>, transitionCompleted: boolean): void {
         if (!transitionCompleted) {
             return;
         }
@@ -366,7 +351,7 @@ class UIPageViewControllerDelegateImpl extends NSObject implements UIPageViewCon
         if (selectedIndex !== nextViewControllerIndex) {
             owner.selectedIndex = nextViewControllerIndex;
         }
-        
+
         console.log("test");
         //
     }
@@ -812,7 +797,7 @@ export class Tabs extends TabsBase {
 
         // items.forEach((item, i) => {
         //     const controller = this.getViewController(item);
-                                                                            
+
         //     let icon = null;
         //     let title = "";
 
@@ -843,32 +828,24 @@ export class Tabs extends TabsBase {
     public setTabStripItems(items: Array<TabStripItem>) {
         const tabBarItems = [];
 
+        let icon = null;
+        let title = "";
+
         items.forEach((item: TabStripItem, i, arr) => {
-            const tabBarItem = UITabBarItem.alloc().initWithTitleImageTag(item.title, null, 0);
+            icon = this._getIcon(item.iconSource);
+            title = item.title;
+
+            const tabBarItem = UITabBarItem.alloc().initWithTitleImageTag(title, icon, i);
             tabBarItems.push(tabBarItem);
             item.setNativeView(tabBarItem);
         });
+
         this.tabBarItems = tabBarItems;
 
         if (this.viewController && this.viewController.tabBar) {
             this.viewController.tabBar.items = NSArray.arrayWithArray(tabBarItems);
             this.tabStrip.setNativeView(this.viewController.tabBar);
         }
-
-        // tabBar.items = <NSArray<UITabBarItem>>NSArray.alloc().initWithArray([
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        //     UITabBarItem.alloc().initWithTitleImageTag("Test", null, 0),
-        // ]);
 
         // const length = items ? items.length : 0;
         // if (length === 0) {
