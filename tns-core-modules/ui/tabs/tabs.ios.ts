@@ -64,6 +64,7 @@ class UIPageViewControllerImpl extends UIPageViewController {
     }
 
     public viewDidLoad(): void {
+        console.log("---> viewDidLoad");
         const owner = this._owner.get();
         const tabBarItems = owner.tabBarItems;
         const tabBar = MDCTabBar.alloc().initWithFrame(this.view.bounds);
@@ -826,6 +827,7 @@ export class Tabs extends TabsBase {
     }
 
     public setTabStripItems(items: Array<TabStripItem>) {
+        console.log("---> setTabStripItems");
         const tabBarItems = [];
         items.forEach((item: TabStripItem, i) => {
             const tabItemSpec = this.createTabItemSpec(item, i);
@@ -834,6 +836,18 @@ export class Tabs extends TabsBase {
         });
 
         this.tabBarItems = tabBarItems;
+
+        if (this.viewController.tabBar.hasTitles && this.viewController.tabBar.hasImages) {
+            this.viewController.tabBar.itemAppearance = MDCTabBarItemAppearance.TitledImages;
+        } else if (this.viewController.tabBar.hasTitles) {
+            this.viewController.tabBar.itemAppearance = MDCTabBarItemAppearance.Titles;
+        } else if (this.viewController.tabBar.hasImages) {
+            this.viewController.tabBar.itemAppearance = MDCTabBarItemAppearance.Images;
+        }
+
+        console.log("---> hasTitles", this.viewController.tabBar.hasTitles);
+        console.log("---> hasImages", this.viewController.tabBar.hasImages);
+        console.log("---> this.viewController.tabBar.itemAppearance", this.viewController.tabBar.itemAppearance);
 
         if (this.viewController && this.viewController.tabBar) {
             this.viewController.tabBar.items = NSArray.arrayWithArray(tabBarItems);
@@ -922,16 +936,21 @@ export class Tabs extends TabsBase {
 
         if (item.label) {
             title = item.label.text;
+            item.title = item.label.text;
+            this.viewController.tabBar.hasTitles = true;
         } else if (item.title) {
             title = item.title;
+            this.viewController.tabBar.hasTitles = true;
         }
 
         if (item.image) {
             icon = this._getIcon(item.image.src);
+            this.viewController.tabBar.hasImages = true;
         } else if (item.iconSource) {
             icon = this._getIcon(item.iconSource);
+            this.viewController.tabBar.hasImages = true;
         }
-        console.log("---> index", index);
+
         const result = UITabBarItem.alloc().initWithTitleImageTag(title, icon, index);
 
         return result;
