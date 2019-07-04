@@ -272,7 +272,7 @@ class UIPageViewControllerDataSourceImpl extends NSObject implements UIPageViewC
         const owner = this._owner.get();
         let selectedIndex = owner.selectedIndex;
 
-        if (selectedIndex === 2) {
+        if (selectedIndex === owner.items.length - 1) {
             return null;
         }
 
