@@ -827,17 +827,10 @@ export class Tabs extends TabsBase {
 
     public setTabStripItems(items: Array<TabStripItem>) {
         const tabBarItems = [];
-
-        let icon = null;
-        let title = "";
-
-        items.forEach((item: TabStripItem, i, arr) => {
-            icon = this._getIcon(item.iconSource);
-            title = item.title;
-
-            const tabBarItem = UITabBarItem.alloc().initWithTitleImageTag(title, icon, i);
-            tabBarItems.push(tabBarItem);
-            item.setNativeView(tabBarItem);
+        items.forEach((item: TabStripItem, i) => {
+            const tabItemSpec = this.createTabItemSpec(item, i);
+            tabBarItems.push(tabItemSpec);
+            item.setNativeView(tabItemSpec);
         });
 
         this.tabBarItems = tabBarItems;
@@ -920,6 +913,28 @@ export class Tabs extends TabsBase {
 
     public setTabBarBackgroundColor(value: UIColor | Color): void {
         this._ios.tabBar.barTintColor = value instanceof Color ? value.ios : value;
+    }
+
+    private createTabItemSpec(item: TabStripItem, i: number): UITabBarItem {
+        let icon = null;
+        let title = "";
+        let index = i;
+
+        if (item.label) {
+            title = item.label.text;
+        } else if (item.title) {
+            title = item.title;
+        }
+
+        if (item.image) {
+            icon = this._getIcon(item.image.src);
+        } else if (item.iconSource) {
+            icon = this._getIcon(item.iconSource);
+        }
+        console.log("---> index", index);
+        const result = UITabBarItem.alloc().initWithTitleImageTag(title, icon, index);
+
+        return result;
     }
 
     [selectedIndexProperty.setNative](value: number) {
